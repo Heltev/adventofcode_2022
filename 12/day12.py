@@ -85,7 +85,7 @@ def bfs(integer_grid, start_pos, target_pos):
     queue = temp_queue
     a+=1
       
-  return 1000000000000
+  return -1
     
 def main():
   grid = readfile()
@@ -98,12 +98,22 @@ def main():
   print(bfs(integer_grid,start_pos,target_pos))
 
   ## Part 2
+  no_solution = []
   starts = get_multiple_start(grid)
   shortest = 100000000000000
-  for element in starts:
-    path = bfs(integer_grid,element,target_pos)
-    if int(path) < shortest:
-      shortest = path
+  for start_pos in starts:
+    cancel = 0
+    neighbours = get_possible_next_nodes(start_pos,integer_grid)
+    for element in neighbours:
+      if element in no_solution:
+        no_solution.append(start_pos)
+        cancel = 1
+    if not cancel:
+      path = bfs(integer_grid,start_pos,target_pos)
+      if path == -1:
+        no_solution.append(start_pos)
+      elif path < shortest:
+        shortest = path
   print(shortest)
   
 
